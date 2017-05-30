@@ -5,8 +5,7 @@
             {
                 "modules": false
             }
-        ],
-        "react"
+        ]
     ],
     "plugins": [
         "external-helpers"

@@ -3,7 +3,7 @@
   "name": "Munchkinland",
   "short_name": "mkin",
   "description": "An extension for rendering ANSI color codes in text content.",
-  "version": "1.0",
+  "version": "1.0.1",
   "content_scripts": [{
     "matches": ["*://*/*"],
     "run_at": "document_end",

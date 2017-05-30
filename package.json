@@ -10,7 +10,8 @@
     "build-bg": "rollup -c rollup-background.conf.js",
     "build-opt": "rollup -c rollup-options.conf.js && cp munchkinland/src/options.html munchkinland/dist/options.html && cp munchkinland/src/options.css munchkinland/dist/options.css",
     "build": "npm run build-cs && npm run build-bg && npm run build-opt",
-    "pkg": "npm run clean && npm run lint && npm run build && zip -r munchkinland.zip munchkinland -x *src*",
+    "shrink": "uglifyjs munchkinland/dist/background.js -m -c -o munchkinland/dist/background.js && uglifyjs munchkinland/dist/content.js -m -c -o munchkinland/dist/content.js && uglifyjs munchkinland/dist/options.js -m -c -o munchkinland/dist/options.js",
+    "pkg": "npm run clean && npm run lint && npm run build && npm run shrink && zip -r munchkinland.zip munchkinland -x *src*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": "git+https://github.com/jnu/munchkinland.git",

@@ -165,7 +165,7 @@ var FORMAT = {
     },
     49: function(style, defaults, palette) {
         return update(style, {
-            'background-color': defaults.color
+            'background-color': defaults.backgroundColor
         });
     },
     90: function(style, defaults, palette) {

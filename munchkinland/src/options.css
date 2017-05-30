@@ -1,0 +1,16 @@
+.col1 {
+    width: 100px;
+    display: inline-block;
+    text-align: right;
+    padding-right: 5px;
+}
+
+.-clr {
+    max-width: 60px;
+}
+
+.-swatch {
+    display: inline-block;
+    height: 1rem;
+    width: 1rem;
+}

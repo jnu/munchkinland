@@ -1,16 +1,16 @@
 /**
  * Long-running script to intercept request headers and detect plain text.
  *
- * Plain text files are assumed to need color.
+ * All plain text files are assumed to need color.
  * TODO make this configurable in settings.
  */
 
 
 /**
- * Map from URL to boolean "Is this plain text?"
+ * Map from URL to info about that URL parsed from headers.
  * @type {Object}
  */
-var state = {};
+const state = {};
 
 
 /**
@@ -21,7 +21,7 @@ var state = {};
  * that will request them.
  * @type {Number}
  */
-var TIMEOUT = 1000 * 60 * 5;
+const TIMEOUT = 1000 * 60 * 5;
 
 
 /**
@@ -47,10 +47,10 @@ function cleanup(url) {
  * Clean up stale items in state to prevent unbounded memory usage.
  */
 function cleanHouse() {
-    var now = Date.now()
-    var invalidated = [];
+    const now = Date.now()
+    const invalidated = [];
 
-    for (var key in state) {
+    for (let key in state) {
         if (state.hasOwnProperty(key)) {
             if ((now - state[key].ts) > TIMEOUT) {
                 invalidated.push(key);
@@ -58,7 +58,7 @@ function cleanHouse() {
         }
     }
 
-    for (var key of invalidated) {
+    for (let key of invalidated) {
         cleanup(key);
     }
 }
@@ -69,12 +69,13 @@ function cleanHouse() {
  * @param  {Object} details - see https://developer.chrome.com/extensions/webRequest
  */
 function processRequestHeaders(details) {
-    var headers = details.responseHeaders;
+    const headers = details.responseHeaders;
 
     if (headers) {
-        var contentTypeHeader = headers.filter(function(header) {
+        let contentTypeHeader = headers.filter(function(header) {
             return /content-type/i.test(header.name);
         });
+
         if (contentTypeHeader.length) {
             if (/text\/plain/i.test(contentTypeHeader[0].value)) {
                 state[details.url] = {
@@ -99,7 +100,7 @@ function processRequestHeaders(details) {
  * @param  {Function} sendResponse
  */
 function handleMessage(request, sender, sendResponse) {
-    var url = sender.tab.url;
+    const url = sender.tab.url;
 
     switch (request.action) {
         // Test whether the script's page should be colorized.
@@ -113,18 +114,23 @@ function handleMessage(request, sender, sendResponse) {
             cleanup(url);
             break;
         default:
-            console.warn('Unknown request from content-script:', request.action);
+            console.warn('Unknown request from content script:', request.action);
     }
 }
 
 
-// Attach listener to intercept response headers.
-chrome.webRequest.onResponseStarted.addListener(
-    processRequestHeaders,
-    { urls: ['*://*/*'] },
-    ['responseHeaders']
-);
+function init() {
+    // Attach listener to intercept response headers.
+    chrome.webRequest.onResponseStarted.addListener(
+        processRequestHeaders,
+        { urls: ['*://*/*'] },
+        ['responseHeaders']
+    );
 
 
-// Handle messages from the content script.
-chrome.runtime.onMessage.addListener(handleMessage);
+    // Handle messages from the content script.
+    chrome.runtime.onMessage.addListener(handleMessage);
+}
+
+
+init();

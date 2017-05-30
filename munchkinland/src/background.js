@@ -47,7 +47,7 @@ function cleanup(url) {
  * Clean up stale items in state to prevent unbounded memory usage.
  */
 function cleanHouse() {
-    const now = Date.now()
+    const now = Date.now();
     const invalidated = [];
 
     for (let key in state) {
@@ -103,18 +103,18 @@ function handleMessage(request, sender, sendResponse) {
     const url = sender.tab.url;
 
     switch (request.action) {
-        // Test whether the script's page should be colorized.
-        case 'analyze':
-            sendResponse({
-                colorize: shouldColorize(url)
-            });
-            break;
-        // Discard state associated with script's page.
-        case 'thanks':
-            cleanup(url);
-            break;
-        default:
-            console.warn('Unknown request from content script:', request.action);
+    // Test whether the script's page should be colorized.
+    case 'analyze':
+        sendResponse({
+            colorize: shouldColorize(url)
+        });
+        break;
+    // Discard state associated with script's page.
+    case 'thanks':
+        cleanup(url);
+        break;
+    default:
+        console.warn('Unknown request from content script:', request.action);
     }
 }
 

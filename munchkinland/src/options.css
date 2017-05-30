@@ -5,6 +5,12 @@
     padding-right: 5px;
 }
 
-.cls {
+.-clr {
     max-width: 60px;
+}
+
+.-swatch {
+    display: inline-block;
+    height: 1rem;
+    width: 1rem;
 }

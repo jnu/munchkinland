@@ -59,6 +59,20 @@ const BASE_CLS = 'base-input';
 
 
 /**
+ * Class to mark color inputs.
+ * @type {String}
+ */
+const CLR_INPUT_CLS = '-clr';
+
+
+/**
+ * Class to mark swatch class.
+ * @type {String}
+ */
+const SWATCH_CLS = '-swatch';
+
+
+/**
  * Generate HTML for a config section.
  * @param  {Object} config
  * @param  {Object} labels
@@ -74,7 +88,10 @@ function generateConfigHtml(config, labels, className) {
                 <input type="text"
                        value="${value}"
                        data-key="${key}"
-                       class="${className}" />
+                       class="${className} ${CLR_INPUT_CLS}" />
+            </span>
+            <span class="col3">
+                <i class="${SWATCH_CLS}" data-key="${key}"></i>
             </span>
         </div>`;
     });
@@ -148,11 +165,68 @@ function save(e) {
 
 
 /**
+ * Update the swatch for a target input.
+ * @param  {InputElement} target
+ */
+function updateSwatch(target) {
+    const key = target.dataset.key;
+    const swatch = document.querySelector(`.${SWATCH_CLS}[data-key=${key}]`);
+    swatch.style.backgroundColor = target.value;
+}
+
+
+/**
+ * Delegated keyUp event handlers.
+ * @type {Object}
+ */
+const DELEGATED_KEY_HANDLERS = {
+    [CLR_INPUT_CLS]: e => {
+        updateSwatch(e.target);
+    }
+};
+
+
+/**
+ * Sync colors from the inputs to the swatches.
+ */
+function syncColors() {
+    const els = Array.from(document.getElementsByClassName(CLR_INPUT_CLS));
+    els.forEach(el => updateSwatch(el));
+}
+
+
+/**
+ * Handle a key up event.
+ * @param  {Event} e
+ */
+function handleKeyUpEvent(e) {
+    Object.keys(DELEGATED_KEY_HANDLERS).forEach(cls => {
+        if (e.target.classList.contains(cls)) {
+            DELEGATED_KEY_HANDLERS[cls](e);
+        }
+    });
+}
+
+
+/**
+ * Install event handlers on document.
+ */
+function setHandlers() {
+    document.body.addEventListener('keyup', handleKeyUpEvent);
+}
+
+
+/**
  * Render options.
  */
 function render() {
-    getPalette().then(renderPalette);
-    getBase().then(renderBase);
+    Promise.all([
+        getPalette().then(renderPalette),
+        getBase().then(renderBase),
+    ]).then(() => {
+        setHandlers();
+        syncColors();
+    });
 }
 
 

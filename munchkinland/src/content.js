@@ -12,8 +12,10 @@ import { update, toStyleString } from './util';
  * @type {Object}
  */
 const getDefaultStyle = (palette, base) => ({
-    'background-color': palette[base.background],
-    color: palette[base.foreground],
+    'background-color': palette.hasOwnProperty(base.background) ?
+        palette[base.background] : base.background,
+    color: palette.hasOwnProperty(base.foreground) ?
+        palette[base.foreground] : base.foreground,
     visibility: 'visible',
     'text-decoration': 'none',
     'font-weight': 'normal',

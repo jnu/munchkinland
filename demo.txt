@@ -1,0 +1,11 @@
+[31mHello![0m[32m This is a log output.[0m
+[33m
+You would really like to read it ...[0m[35m
+... But it has all these [0m[31mc[0m[32mo[0m[33ml[0m[35mo[0m[36mr[0m[34ms[0m[32m you are supposed to see[0m[36m ...
+... But you can't because you're on the [0m[31mweb.[0m[33m
+
+And those [0m[46m[33mcolor codes[0m[34m just hinder instead of help.[0m
+
+[32mThankfully, there's [0m[41m[33mMunchkinland[0m[32m![0m
+
+[35mToto, I really don't think we're in Kansas anymore.[0m
